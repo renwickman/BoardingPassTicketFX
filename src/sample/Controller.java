@@ -49,32 +49,50 @@ public class Controller {
     //optional used to execute any code before GUI loads
     public void initialize() {
         checkInput check = new checkInput(name, "test");
-        check.start();
+//        check.start();
         groupGender = new ToggleGroup();
         male.setToggleGroup(groupGender);
         female.setToggleGroup(groupGender);
+        departLocation.getItems().addAll("New York", "Los Angeles", "Phoenix", "Indianapolis", "Detroit");
+        arriveLocation.getItems().addAll("New York", "Los Angeles", "Phoenix", "Indianapolis", "Detroit");
+        time.getItems().addAll("6:00 AM", "8:00 AM", "10:00 AM", "12:00 PM", "2:00 PM", "4:00 PM", "6:00 PM", "8:00 PM", "10:00 PM");
     }
+
+
 
     @FXML
     void pressEnter() {
-        SessionFactory factory = new Configuration().configure("hibernate.cfg.xml")
-                .addAnnotatedClass(Application.class)
-                .buildSessionFactory();
-        Session session = factory.getCurrentSession();
-
         //check if everything is valid
         //if yes commit
 
         if (textFilled() && dateChosen() && timeChosen()){
+            SessionFactory factory = new Configuration().configure("hibernate.cfg.xml")
+                    .addAnnotatedClass(Application.class)
+                    .buildSessionFactory();
+            Session session = factory.getCurrentSession();
             try {
                 Application application = new Application();
+                application.setName(name.getText());
+                application.setAge(Integer.parseInt(age.getText()));
+                application.setGender(((RadioButton) groupGender.getSelectedToggle()).getText().substring(0, 1));
+                application.setPhone(Long.parseLong(phoneNumber.getText()));
+                application.setEmail(email.getText());
+                application.setOrigin(String.valueOf(departLocation.getValue()));
+                application.setDepartDate(String.valueOf(departDate.getValue()));
+                application.setDepartTime(String.valueOf(time.getValue()));
+                application.setDestination(String.valueOf(arriveLocation.getValue()));
+                session.beginTransaction();
+                session.save(application);
+                session.getTransaction().commit();
             } catch (Exception e) {
                 System.out.println(e.getMessage());
+                System.out.println(((RadioButton) groupGender.getSelectedToggle()).getText());
+            } finally {
+                session.close();
+                factory.close();
             }
-        }
 
-        System.out.println("yo");
-        System.out.println(name.getText());
+        }
     }
 
     boolean textFilled(){
@@ -91,8 +109,7 @@ public class Controller {
     }
 
     boolean timeChosen(){
-        System.out.println(time.isShowing());
-        return time.isShowing();
+        return time.getValue() != null;
     }
 
     int valid(String text, String regex) {
@@ -101,8 +118,5 @@ public class Controller {
         }
         return 1;
     }
-
-
-
 
 }
