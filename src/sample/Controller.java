@@ -1,11 +1,8 @@
 package sample;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.MenuButton;
-import javafx.scene.control.RadioButton;
+import javafx.scene.control.*;
 
-import java.awt.*;
 
 public class Controller {
     //create (Name, Email, Age, Gender, When/What Time Leaving, Leaving From/To, ETA)
