@@ -17,29 +17,19 @@
             <Label layoutX="32.0" layoutY="188.0" text="Gender:" />
             <Label layoutX="23.0" layoutY="232.0" text="Phone Number:" />
             <TextField fx:id="phoneNumber" layoutX="119.0" layoutY="228.0" />
-            <Button fx:id="enter" onAction="#pressEnter" layoutX="278.0" layoutY="268.0" mnemonicParsing="false" text="ENTER" />
-            <DatePicker fx:id="departDate" layoutX="386.0" layoutY="143.0" />
-            <Label layoutX="391.0" layoutY="111.0" prefHeight="17.0" prefWidth="163.0" text="When do you want to leave?" />
-            <Label layoutX="379.0" layoutY="188.0" prefHeight="17.0" prefWidth="187.0" text="What time do you want to leave?" />
+            <Button fx:id="enter" layoutX="278.0" layoutY="268.0" mnemonicParsing="false" onAction="#pressEnter" text="ENTER" />
+            <DatePicker fx:id="departDate" layoutX="399.0" layoutY="171.0" prefHeight="18.0" prefWidth="148.0" />
+            <Label layoutX="385.0" layoutY="142.0" prefHeight="17.0" prefWidth="158.0" text="When do you want to leave?" />
+            <Label layoutX="387.0" layoutY="205.0" prefHeight="9.0" prefWidth="188.0" text="What time do you want to leave?" />
 
    <RadioButton fx:id="male" layoutX="106.0" layoutY="188.0" mnemonicParsing="false" text="Male" />
    <RadioButton fx:id="female" layoutX="185.0" layoutY="188.0" mnemonicParsing="false" text="Female" />
 
-            <ChoiceBox fx:id="time" layoutX="435.0" layoutY="220.0">
-              <items>
-                  <CheckMenuItem mnemonicParsing="false" text="06:00 AM" />
-                  <CheckMenuItem mnemonicParsing="false" text="08:00 AM" />
-                  <CheckMenuItem mnemonicParsing="false" text="10:00 AM" />
-                  <CheckMenuItem mnemonicParsing="false" text="12:00 PM" />
-                  <CheckMenuItem mnemonicParsing="false" text="02:00 PM" />
-                  <CheckMenuItem mnemonicParsing="false" text="04:00 PM" />
-                  <CheckMenuItem mnemonicParsing="false" text="06:00 PM" />
-                  <CheckMenuItem mnemonicParsing="false" text="08:00 PM" />
-                  <CheckMenuItem mnemonicParsing="false" text="10:00 PM" />
-              </items>
-            </ChoiceBox>
-            <Label layoutX="388.0" layoutY="45.0" prefHeight="17.0" prefWidth="170.0" text="Where are you departing from?" />
-            <Label layoutX="390.0" layoutY="78.0" prefHeight="17.0" prefWidth="148.0" text="Where are you arriving to?" />
+            <Label layoutX="379.0" layoutY="40.0" prefHeight="3.0" prefWidth="185.0" text="Where are you departing from?" />
+            <Label layoutX="391.0" layoutY="89.0" prefHeight="12.0" prefWidth="142.0" text="Where are you arriving to?" />
+            <ChoiceBox fx:id="time" layoutX="409.0" layoutY="237.0" prefHeight="22.0" prefWidth="128.0" />
+            <ChoiceBox fx:id="departLocation" layoutX="409.0" layoutY="114.0" prefHeight="19.0" prefWidth="124.0" />
+            <ChoiceBox fx:id="arriveLocation" layoutX="403.0" layoutY="61.0" prefHeight="23.0" prefWidth="130.0" />
          </children></Pane>
    </center>
    <bottom>
