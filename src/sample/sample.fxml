@@ -17,6 +17,10 @@
             <TextField layoutX="95.0" layoutY="184.0" />
             <Label layoutX="23.0" layoutY="240.0" text="Phone Number:" />
             <TextField layoutX="114.0" layoutY="236.0" />
+            <Button layoutX="274.0" layoutY="303.0" mnemonicParsing="false" text="ENTER" />
+            <DatePicker layoutX="392.0" layoutY="44.0" />
+            <Label layoutX="392.0" layoutY="15.0" prefHeight="17.0" prefWidth="163.0" text="When do you want to leave?" />
+            <Label layoutX="392.0" layoutY="86.0" prefHeight="17.0" prefWidth="187.0" text="What time do you want to leave?" />
          </children></Pane>
    </center>
    <bottom>
