@@ -4,30 +4,40 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
    <center>
       <Pane prefHeight="322.0" prefWidth="600.0" BorderPane.alignment="CENTER">
          <children>
             <Label layoutX="35.0" layoutY="57.0" text="Name:" />
-            <TextField layoutX="84.0" layoutY="53.0" />
-            <TextField layoutX="84.0" layoutY="94.0" prefHeight="25.0" prefWidth="219.0" />
+            <TextField fx:id="name" layoutX="84.0" layoutY="53.0" />
+            <TextField fx:id="email" layoutX="84.0" layoutY="94.0" prefHeight="25.0" prefWidth="219.0" />
             <Label layoutX="34.0" layoutY="98.0" prefHeight="17.0" prefWidth="38.0" text="Email:" />
             <Label layoutX="41.0" layoutY="138.0" text="Age:" />
-            <TextField layoutX="84.0" layoutY="134.0" />
+            <TextField fx:id="age" layoutX="84.0" layoutY="134.0" />
             <Label layoutX="32.0" layoutY="188.0" text="Gender:" />
             <Label layoutX="23.0" layoutY="232.0" text="Phone Number:" />
-            <TextField layoutX="119.0" layoutY="228.0" />
-            <Button layoutX="278.0" layoutY="268.0" mnemonicParsing="false" text="ENTER" />
-            <DatePicker layoutX="386.0" layoutY="143.0" />
+            <TextField fx:id="phoneNumber" layoutX="119.0" layoutY="228.0" />
+            <Button fx:id="enter" onAction="#pressEnter" layoutX="278.0" layoutY="268.0" mnemonicParsing="false" text="ENTER" />
+            <DatePicker fx:id="departDate" layoutX="386.0" layoutY="143.0" />
             <Label layoutX="391.0" layoutY="111.0" prefHeight="17.0" prefWidth="163.0" text="When do you want to leave?" />
             <Label layoutX="379.0" layoutY="188.0" prefHeight="17.0" prefWidth="187.0" text="What time do you want to leave?" />
-            <RadioButton layoutX="106.0" layoutY="188.0" mnemonicParsing="false" text="Male" />
-            <RadioButton layoutX="185.0" layoutY="188.0" mnemonicParsing="false" text="Female" />
-            <MenuButton layoutX="435.0" layoutY="220.0" mnemonicParsing="false" text="Time">
+
+   <RadioButton fx:id="male" layoutX="106.0" layoutY="188.0" mnemonicParsing="false" text="Male" />
+   <RadioButton fx:id="female" layoutX="185.0" layoutY="188.0" mnemonicParsing="false" text="Female" />
+
+            <ChoiceBox fx:id="time" layoutX="435.0" layoutY="220.0">
               <items>
-                  <CheckMenuItem mnemonicParsing="false" text="8:00 AM" />
+                  <CheckMenuItem mnemonicParsing="false" text="06:00 AM" />
+                  <CheckMenuItem mnemonicParsing="false" text="08:00 AM" />
+                  <CheckMenuItem mnemonicParsing="false" text="10:00 AM" />
+                  <CheckMenuItem mnemonicParsing="false" text="12:00 PM" />
+                  <CheckMenuItem mnemonicParsing="false" text="02:00 PM" />
+                  <CheckMenuItem mnemonicParsing="false" text="04:00 PM" />
+                  <CheckMenuItem mnemonicParsing="false" text="06:00 PM" />
+                  <CheckMenuItem mnemonicParsing="false" text="08:00 PM" />
+                  <CheckMenuItem mnemonicParsing="false" text="10:00 PM" />
               </items>
-            </MenuButton>
+            </ChoiceBox>
             <Label layoutX="388.0" layoutY="45.0" prefHeight="17.0" prefWidth="170.0" text="Where are you departing from?" />
             <Label layoutX="390.0" layoutY="78.0" prefHeight="17.0" prefWidth="148.0" text="Where are you arriving to?" />
          </children></Pane>
