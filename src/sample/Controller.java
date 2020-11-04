@@ -41,6 +41,8 @@ public class Controller {
     private ChoiceBox arriveLocation;
     @FXML
     private Button enter;
+    @FXML
+    private ChoiceBox time;
 
     ArrayList<TextField> textFields = new ArrayList<>();
     ToggleGroup groupGender;
