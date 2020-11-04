@@ -25,7 +25,7 @@
    <RadioButton fx:id="male" layoutX="106.0" layoutY="188.0" mnemonicParsing="false" text="Male" />
    <RadioButton fx:id="female" layoutX="185.0" layoutY="188.0" mnemonicParsing="false" text="Female" />
 
-            <MenuButton fx:id="time" layoutX="435.0" layoutY="220.0" mnemonicParsing="false" text="Time">
+            <ChoiceBox fx:id="time" layoutX="435.0" layoutY="220.0">
               <items>
                   <CheckMenuItem mnemonicParsing="false" text="06:00 AM" />
                   <CheckMenuItem mnemonicParsing="false" text="08:00 AM" />
@@ -37,7 +37,7 @@
                   <CheckMenuItem mnemonicParsing="false" text="08:00 PM" />
                   <CheckMenuItem mnemonicParsing="false" text="10:00 PM" />
               </items>
-            </MenuButton>
+            </ChoiceBox>
             <Label layoutX="388.0" layoutY="45.0" prefHeight="17.0" prefWidth="170.0" text="Where are you departing from?" />
             <Label layoutX="390.0" layoutY="78.0" prefHeight="17.0" prefWidth="148.0" text="Where are you arriving to?" />
          </children></Pane>
