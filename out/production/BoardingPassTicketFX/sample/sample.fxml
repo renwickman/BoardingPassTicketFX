@@ -9,16 +9,16 @@
       <Pane prefHeight="322.0" prefWidth="600.0" BorderPane.alignment="CENTER">
          <children>
             <Label layoutX="35.0" layoutY="57.0" text="Name:" />
-            <TextField fx:id="name" layoutX="84.0" layoutY="53.0" />
-            <TextField fx:id="email" layoutX="84.0" layoutY="94.0" prefHeight="25.0" prefWidth="219.0" />
+            <TextField fx:id="name" layoutX="84.0" layoutY="53.0" style="-fx-border-color: red;" />
+            <TextField fx:id="email" layoutX="84.0" layoutY="94.0" prefHeight="25.0" prefWidth="219.0" style="-fx-border-color: red;" />
             <Label layoutX="34.0" layoutY="98.0" prefHeight="17.0" prefWidth="38.0" text="Email:" />
             <Label layoutX="41.0" layoutY="138.0" text="Age:" />
-            <TextField fx:id="age" layoutX="84.0" layoutY="134.0" />
+            <TextField fx:id="age" layoutX="84.0" layoutY="134.0" style="-fx-border-color: red;" />
             <Label layoutX="32.0" layoutY="188.0" text="Gender:" />
             <Label layoutX="23.0" layoutY="232.0" text="Phone Number:" />
-            <TextField fx:id="phoneNumber" layoutX="119.0" layoutY="228.0" />
+            <TextField fx:id="phoneNumber" layoutX="119.0" layoutY="228.0" style="-fx-border-color: red;" />
             <Button fx:id="enter" layoutX="278.0" layoutY="268.0" mnemonicParsing="false" onAction="#pressEnter" text="ENTER" />
-            <DatePicker fx:id="departDate" layoutX="399.0" layoutY="171.0" prefHeight="18.0" prefWidth="148.0" />
+            <DatePicker fx:id="departDate" layoutX="399.0" layoutY="171.0" prefHeight="18.0" prefWidth="148.0" style="-fx-border-color: red;" />
             <Label layoutX="385.0" layoutY="142.0" prefHeight="17.0" prefWidth="158.0" text="When do you want to leave?" />
             <Label layoutX="387.0" layoutY="205.0" prefHeight="9.0" prefWidth="188.0" text="What time do you want to leave?" />
 
@@ -27,9 +27,9 @@
 
             <Label layoutX="379.0" layoutY="40.0" prefHeight="3.0" prefWidth="185.0" text="Where are you departing from?" />
             <Label layoutX="391.0" layoutY="89.0" prefHeight="12.0" prefWidth="142.0" text="Where are you arriving to?" />
-            <ChoiceBox fx:id="time" layoutX="409.0" layoutY="237.0" prefHeight="22.0" prefWidth="128.0" />
-            <ChoiceBox fx:id="departLocation" layoutX="409.0" layoutY="114.0" prefHeight="19.0" prefWidth="124.0" />
-            <ChoiceBox fx:id="arriveLocation" layoutX="403.0" layoutY="61.0" prefHeight="23.0" prefWidth="130.0" />
+            <ChoiceBox fx:id="time" layoutX="409.0" layoutY="237.0" prefHeight="22.0" prefWidth="128.0" style="-fx-border-color: red;" />
+            <ChoiceBox fx:id="departLocation" layoutX="409.0" layoutY="114.0" prefHeight="19.0" prefWidth="124.0" style="-fx-border-color: red;" />
+            <ChoiceBox fx:id="arriveLocation" layoutX="403.0" layoutY="61.0" prefHeight="23.0" prefWidth="130.0" style="-fx-border-color: red;" />
          </children></Pane>
    </center>
    <bottom>
