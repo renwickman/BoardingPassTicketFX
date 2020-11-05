@@ -266,5 +266,28 @@ public class Trip {
 
     }
 
-
 }
+-------------------------------------------------------------------------------------------------------------------------
+
+    void generatePass(){
+        SessionFactory factory = new Configuration().configure("hibernate.cfg.xml")
+                .addAnnotatedClass(Application.class)
+                .buildSessionFactory();
+
+        Session session = factory.getCurrentSession();
+
+        try {
+            session.beginTransaction();
+            passenger.setBoarding_pass(createBoardPass());
+            session.update(passenger);
+            session.getTransaction().commit();
+        } finally {
+            session.close();
+            factory.close();
+        }
+    }
+    ----------------------------------------------------------------------------------------------------------------------
+
+    //----------Use this code once you solve depart/arrive-----------------------------------------------------------//
+    //        ZoneId fromId = ZoneId.of(depart.getTimeZoneString());
+    //        ZoneId toId = ZoneId.of(arrive.getTimeZoneString());

@@ -13,7 +13,11 @@ import org.hibernate.cfg.Configuration;
 
 
 import java.awt.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -21,7 +25,9 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 
 public class Controller {
@@ -59,12 +65,12 @@ public class Controller {
     @FXML
     private Button enter;
 
-    ArrayList<TextField> textFields = new ArrayList<>();
-    ToggleGroup groupGender;
+    //    ArrayList<TextField> textFields = new ArrayList<>();
     final String DATE_FORMAT = "MM/dd/yyyy";
-    Cities cities;
-    Locations depart;
-    Locations arrive;
+    Path filePath;
+    //Cities cities;
+//    Locations depart;
+//    Locations arrive;
 
     //update (Boarding Pass & Price)
     @FXML
@@ -74,9 +80,9 @@ public class Controller {
         male.setToggleGroup(groupGender);
         female.setToggleGroup(groupGender);
         male.setSelected(true);
-        departLocation.getItems().addAll("New York", "Los Angeles", "Phoenix", "Indianapolis", "Detroit");
-        arriveLocation.getItems().addAll("New York", "Los Angeles", "Phoenix", "Indianapolis", "Detroit");
-        time.getItems().addAll("6:00 AM", "8:00 AM", "10:00 AM", "12:00 PM", "2:00 PM", "4:00 PM", "6:00 PM", "8:00 PM", "10:00 PM");
+        departLocation.getItems().addAll("New_York", "Los_Angeles", "Phoenix", "Indianapolis", "Detroit");
+        arriveLocation.getItems().addAll("New_York", "Los_Angeles", "Phoenix", "Indianapolis", "Detroit");
+        time.getItems().addAll("06:00 AM", "08:00 AM", "10:00 AM", "12:00 PM", "02:00 PM", "04:00 PM", "06:00 PM", "08:00 PM", "10:00 PM");
         setStyle(name, nameRegex);
         setStyle(email, emailRegex);
         setStyle(age, ageRegex);
@@ -111,6 +117,11 @@ public class Controller {
                 application.setDepartDate(departDate.getValue().format(DateTimeFormatter.ofPattern(DATE_FORMAT)));
                 application.setDepartTime(String.valueOf(time.getValue()));
                 application.setDestination(String.valueOf(arriveLocation.getValue()));
+                application.setEta(estTimeArrive());
+                application.setTotal_price(priceCheck());
+                application.setBoarding_pass(createBoardPass());
+                createFile();
+                writeToAFile(application);
                 session.beginTransaction();
                 session.save(application);
                 session.getTransaction().commit();
@@ -120,8 +131,23 @@ public class Controller {
             } finally {
                 session.close();
             }
+//            final String DATE_FORMAT = "MM/dd/yyyy hh:mm a";
+//
+//            String leaveDateTime = departDate.getValue().format(DateTimeFormatter.ofPattern(DATE_FORMAT)) + " " + String.valueOf(time);
+//            LocalDateTime ldt = LocalDateTime.parse(leaveDateTime, DateTimeFormatter.ofPattern(DATE_FORMAT));
         }
     }
+
+//    void updateInfo(Application application) {
+//        try{
+//            Session session = factory.getCurrentSession();
+//
+//        } catch (Exception e) {
+//            System.out.println(e.getMessage());
+//        } finally {
+//            session.close();
+//        }
+//    }
 
     //Looks at each part of the form for validity.
     boolean verifyInputs() {
@@ -145,30 +171,33 @@ public class Controller {
         return text.matches(regex) ? 0 : 1;
     }
 
-    String estArrive(){
+    public String estTimeArrive() {
         final String DATE_FORMAT = "MM/dd/yyyy hh:mm a";
+        final String TEMP = "MM/dd/yyyy";
 
-        String leaveDateTime = departDate.getValue() + " " + time.getValue();
+        DateTimeFormatter dt = DateTimeFormatter.ofPattern(TEMP);
+        String departString = dt.format(departDate.getValue());
+        String leaveDateTime = departString + " " + time.getValue();
+
         LocalDateTime ldt = LocalDateTime.parse(leaveDateTime, DateTimeFormatter.ofPattern(DATE_FORMAT));
 
         double earthRadius = 6371.01 * 0.621;
+        Cities cities = new Cities();
+        Coordinates depart = cities.getCityList().get(departLocation.getValue());
+        Coordinates arrive = cities.getCityList().get(arriveLocation.getValue());
 
-//        Double distance = Math.round(earthRadius * Math.acos(Math.sin(depart.getLat()) * Math.sin(arrive.getLat())
-//                + Math.cos(depart.getLat()) * Math.cos(arrive.getLat()) * Math.cos(depart.getLon() - arrive.getLon())));
+        double distance = Math.round(earthRadius * Math.acos(Math.sin(depart.getLat()) * Math.sin(arrive.getLat())
+                + Math.cos(depart.getLat()) * Math.cos(arrive.getLat()) * Math.cos(depart.getLon() - arrive.getLon())));
 
-        double distance1 = 1900 / 50;
+        double distance1 = distance / 50;
         double hours = Math.floor(distance1);
         double minutes = Math.ceil((distance1 - hours) * 60);
 
         LocalDateTime ldt2 = ldt.plusHours((long) hours).plusMinutes((long) minutes);
 
-//----------Use this code once you solve depart/arrive-----------------------------------------------------------//
-//        ZoneId fromId = ZoneId.of(depart.getTimeZoneString());
-//        ZoneId toId = ZoneId.of(arrive.getTimeZoneString());
 
         ZoneId fromId = ZoneId.of("America/" + departLocation.getValue());
         ZoneId toId = ZoneId.of("America/" + arriveLocation.getValue());
-
 
         ZonedDateTime currentTime = ldt2.atZone(fromId);
 
@@ -181,25 +210,55 @@ public class Controller {
         return arriveTime;
     }
 
-    //-----change back to float------//
-    private void priceCheck(){
+
+    private float priceCheck() {
         float price = (float) 150.00;
-//
-//        if (passenger.getGender().equals("F")){
-//            price = price * .75f;
-//        }
-//        else if (passenger.getAge() <= 12){
-//            price = price * .50f;
-//        }
-//        else if (passenger.getAge() >= 60){
-//            price = price * .40f;
-//        }
-//        return price;
+
+        if (((RadioButton) groupGender.getSelectedToggle()).getText().substring(0, 1).equals("F")) {
+            price = price * .75f;
+        } else if (Integer.parseInt(age.getText()) <= 12) {
+            price = price * .50f;
+        } else if (Integer.parseInt(age.getText()) >= 60) {
+            price = price * .40f;
+        }
+        return price;
     }
 
     //checks if an object is null. Used for DatePicker and ChoiceBox
     int valid(Object object) {
         return object == null ? 1 : 0;
+    }
+
+    String createBoardPass() {
+        Random rand = new Random();
+        String pass = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+        StringBuilder res = new StringBuilder();
+        for (int i = 0; i <= 12; i++) {
+            int randIndex = rand.nextInt(pass.length());
+            res.append(pass.charAt(randIndex));
+        }
+        return res.toString();
+    }
+
+
+    public void createFile() {
+        filePath = Paths.get(System.getProperty("user.dir") + "/src/itinerary/" + name.getText() + ".txt");
+        try {
+            Files.createFile(filePath);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    //
+    public void writeToAFile(Application application) {
+        SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
+        Date date = new Date();
+        try {
+            Files.writeString(filePath, formatter.format(date) + application.toString());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     //Visual feedback to show invalid text

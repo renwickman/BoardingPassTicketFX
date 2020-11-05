@@ -9,19 +9,19 @@ public class Coordinates {
         this.longitude = longitude;
     }
 
-    public double getLongitude() {
+    public double getLon() {
         return longitude;
     }
 
-    public void setLongitude(double longitude) {
+    public void setLon(double longitude) {
         this.longitude = longitude;
     }
 
-    public double getLatitude() {
+    public double getLat() {
         return latitude;
     }
 
-    public void setLatitude(double latitude) {
+    public void setLat(double latitude) {
         this.latitude = latitude;
     }
 }
