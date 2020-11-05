@@ -1,10 +1,12 @@
 package sample;
 
+import com.mysql.cj.util.TestUtils;
 import entity.Application;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ChoiceBox;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
@@ -21,8 +23,17 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Controller {
 
+public class Controller {
+    final String nameRegex = ".*\\S+.*";
+    final String emailRegex = "^[A-Za-z0-9+_.-]+@(.+)$";
+    final String ageRegex = "[0-9]{1,3}+";
+    final String phoneRegex = "[0-9]{10}+";
+    final String invalid = "-fx-border-color: red; -fx-focus-color: red;";
+    ToggleGroup groupGender;
+    SessionFactory factory = new Configuration().configure("hibernate.cfg.xml")
+            .addAnnotatedClass(Application.class)
+            .buildSessionFactory();
 
     //create (Name, Email, Age, Gender, When/What Time Leaving, Leaving From/To, ETA)
     @FXML
@@ -57,32 +68,39 @@ public class Controller {
 
     //update (Boarding Pass & Price)
     @FXML
-    //optional used to execute any code before GUI loads
+    //Used to execute code before GUI loads
     public void initialize() {
-        checkInput check = new checkInput(name, "test");
-//        check.start();
         groupGender = new ToggleGroup();
         male.setToggleGroup(groupGender);
         female.setToggleGroup(groupGender);
+        male.setSelected(true);
         departLocation.getItems().addAll("New York", "Los Angeles", "Phoenix", "Indianapolis", "Detroit");
         arriveLocation.getItems().addAll("New York", "Los Angeles", "Phoenix", "Indianapolis", "Detroit");
         time.getItems().addAll("6:00 AM", "8:00 AM", "10:00 AM", "12:00 PM", "2:00 PM", "4:00 PM", "6:00 PM", "8:00 PM", "10:00 PM");
-        cities.g
+        setStyle(name, nameRegex);
+        setStyle(email, emailRegex);
+        setStyle(age, ageRegex);
+        setStyle(phoneNumber, phoneRegex);
+        setStyle(time);
+        setStyle(departLocation);
+        setStyle(arriveLocation);
+        setStyle(departDate);
+        departDate.setDayCellFactory(d ->
+                new DateCell() {
+                    @Override
+                    public void updateItem(LocalDate item, boolean empty) {
+                        super.updateItem(item, empty);
+                        setDisable(item.isBefore(LocalDate.now()));
+                    }
+                });
     }
 
-
-
     @FXML
+        //enter button
     void pressEnter() {
-        //check if everything is valid
-        //if yes commit
-
-        if (textFilled() && dateChosen() && timeChosen()){
-            SessionFactory factory = new Configuration().configure("hibernate.cfg.xml")
-                    .addAnnotatedClass(Application.class)
-                    .buildSessionFactory();
+        if (verifyInputs()) {
             Session session = factory.getCurrentSession();
-            try {
+            try {//build entity
                 Application application = new Application();
                 application.setName(name.getText());
                 application.setAge(Integer.parseInt(age.getText()));
@@ -96,41 +114,35 @@ public class Controller {
                 session.beginTransaction();
                 session.save(application);
                 session.getTransaction().commit();
+                reset();
             } catch (Exception e) {
                 System.out.println(e.getMessage());
-                System.out.println(((RadioButton) groupGender.getSelectedToggle()).getText());
             } finally {
                 session.close();
-                factory.close();
             }
-
         }
     }
 
-    void updateInfo(){
+    //Looks at each part of the form for validity.
+    boolean verifyInputs() {
 
+        return valid(name.getText(), nameRegex) +
+                valid(email.getText(), emailRegex) +
+                valid(phoneNumber.getText(), phoneRegex) +
+                valid(age.getText(), ageRegex) +
+                valid(departDate) +
+                valid(time) +
+                verifyLocations() == 0;
     }
 
-    boolean textFilled(){
-        int count = 0;
-        count += valid(name.getText(), ".\\S+.");
-        count += valid(email.getText(), "^[A-Za-z0-9+_.-]+@(.+)$");
-        count += valid(phoneNumber.getText(), "[0-9]{10}+");
-        count += valid(age.getText(), "[0-9]{1,3}+");
-        return count == 0;
+    //check to see if depart and arrive locations are different
+    int verifyLocations() {
+        return (departLocation.getValue() != null && arriveLocation.getValue() != null && departLocation.getValue().equals(arriveLocation.getValue())) ? 1 : 0;
     }
 
-    boolean dateChosen(){ return departDate.getValue() != null; }
-
-    boolean timeChosen(){
-        return time.getValue() != null;
-    }
-
+    //compares strings against a regex, used for TextFields
     int valid(String text, String regex) {
-        if (text.matches(regex)) {
-            return 0;
-        }
-        return 1;
+        return text.matches(regex) ? 0 : 1;
     }
 
     String estArrive(){
@@ -183,6 +195,55 @@ public class Controller {
 //            price = price * .40f;
 //        }
 //        return price;
+    }
+
+    //checks if an object is null. Used for DatePicker and ChoiceBox
+    int valid(Object object) {
+        return object == null ? 1 : 0;
+    }
+
+    //Visual feedback to show invalid text
+    void setStyle(TextField textField, String regex) {
+        textField.textProperty().addListener((observable, oldValue, newValue) -> {
+            textField.setStyle(!newValue.matches(regex) ? invalid : "");
+        });
+    }
+
+    //Visual feedback when a date picker is null
+    void setStyle(DatePicker datePicker) {
+        datePicker.valueProperty().addListener((observable, oldValue, newValue) -> {
+            datePicker.setStyle(newValue == null ? invalid : "");
+        });
+    }
+
+    //Visual feedback when a choice box is null
+    void setStyle(ChoiceBox choiceBox) {
+        choiceBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            choiceBox.setStyle(newValue == null ? invalid : "");
+            //Outline depart and arrive in red when the same, meaning invalid
+            //weird place to put it as it will get called with time box too. OK for now.
+            if (verifyLocations() == 1) {
+                departLocation.setStyle(invalid);
+                arriveLocation.setStyle(invalid);
+            } else {
+                departLocation.setStyle(departLocation.getValue() == null ? invalid : "");
+                arriveLocation.setStyle(arriveLocation.getValue() == null ? invalid : "");
+            }
+        });
+    }
+
+    //wipes UI after a successful database transaction
+    void reset() {
+        name.setText("");
+        email.setText("");
+        age.setText("");
+        phoneNumber.setText("");
+        departDate.setValue(null);
+        departLocation.setValue(null);
+        arriveLocation.setValue(null);
+        time.setValue(null);
+        male.setSelected(true);
+
     }
 
 }
