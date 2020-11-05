@@ -1,0 +1,13 @@
+11/05/2020
+Boarding Pass: T4GIN3ELNEYW5
+Name: Charlie
+Age: 33
+Gender: M
+Phone Number: 4443332222
+Email: theman@gmail.com
+Departure City: New_York
+Arrival City: Los_Angeles
+Departure Date: 11/06/2020
+Departure Time: 10:00 AM
+ETA: 11/07/2020 10:59 PM
+Total Price: $150.00
