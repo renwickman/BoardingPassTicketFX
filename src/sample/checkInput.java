@@ -1,8 +1,7 @@
 package sample;
 
 import javafx.scene.control.TextField;
-import org.w3c.dom.Text;
-
+// not needed anymore. Keep in case.
 public class checkInput extends Thread implements Runnable {
     TextField text;
     String regex;
@@ -10,7 +9,6 @@ public class checkInput extends Thread implements Runnable {
     checkInput(TextField text, String regex) {
         this.text = text;
     }
-
     //can override
     public void start() {
         super.start();
@@ -20,7 +18,8 @@ public class checkInput extends Thread implements Runnable {
         while (true) {
             try {
                 Thread.sleep(1000);
-                System.out.println(text.getText());
+                if(text.getText().matches(regex))
+                    text.setStyle("-fx-text-box-border: red;,-fx-focus-color: red;");
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
