@@ -1,0 +1,13 @@
+11/05/2020
+Boarding Pass: XR49XFRL2D5MG
+Name: Anthony
+Age: 13
+Gender: M
+Phone Number: 1112223344
+Email: theperson@cox.net
+Departure City: Los_Angeles
+Arrival City: New_York
+Departure Date: 11/06/2020
+Departure Time: 08:00 AM
+ETA: 11/08/2020 02:59 AM
+Total Price: $650.00
