@@ -11,7 +11,13 @@ import org.hibernate.cfg.Configuration;
 
 
 import java.awt.*;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,6 +50,11 @@ public class Controller {
 
     ArrayList<TextField> textFields = new ArrayList<>();
     ToggleGroup groupGender;
+    final String DATE_FORMAT = "MM/dd/yyyy";
+    Cities cities;
+    Locations depart;
+    Locations arrive;
+
     //update (Boarding Pass & Price)
     @FXML
     //optional used to execute any code before GUI loads
@@ -56,6 +67,7 @@ public class Controller {
         departLocation.getItems().addAll("New York", "Los Angeles", "Phoenix", "Indianapolis", "Detroit");
         arriveLocation.getItems().addAll("New York", "Los Angeles", "Phoenix", "Indianapolis", "Detroit");
         time.getItems().addAll("6:00 AM", "8:00 AM", "10:00 AM", "12:00 PM", "2:00 PM", "4:00 PM", "6:00 PM", "8:00 PM", "10:00 PM");
+        cities.g
     }
 
 
@@ -78,7 +90,7 @@ public class Controller {
                 application.setPhone(Long.parseLong(phoneNumber.getText()));
                 application.setEmail(email.getText());
                 application.setOrigin(String.valueOf(departLocation.getValue()));
-                application.setDepartDate(String.valueOf(departDate.getValue()));
+                application.setDepartDate(departDate.getValue().format(DateTimeFormatter.ofPattern(DATE_FORMAT)));
                 application.setDepartTime(String.valueOf(time.getValue()));
                 application.setDestination(String.valueOf(arriveLocation.getValue()));
                 session.beginTransaction();
@@ -95,6 +107,10 @@ public class Controller {
         }
     }
 
+    void updateInfo(){
+
+    }
+
     boolean textFilled(){
         int count = 0;
         count += valid(name.getText(), ".\\S+.");
@@ -104,9 +120,7 @@ public class Controller {
         return count == 0;
     }
 
-    boolean dateChosen(){
-        return departDate.getValue() != null;
-    }
+    boolean dateChosen(){ return departDate.getValue() != null; }
 
     boolean timeChosen(){
         return time.getValue() != null;
@@ -117,6 +131,58 @@ public class Controller {
             return 0;
         }
         return 1;
+    }
+
+    String estArrive(){
+        final String DATE_FORMAT = "MM/dd/yyyy hh:mm a";
+
+        String leaveDateTime = departDate.getValue() + " " + time.getValue();
+        LocalDateTime ldt = LocalDateTime.parse(leaveDateTime, DateTimeFormatter.ofPattern(DATE_FORMAT));
+
+        double earthRadius = 6371.01 * 0.621;
+
+//        Double distance = Math.round(earthRadius * Math.acos(Math.sin(depart.getLat()) * Math.sin(arrive.getLat())
+//                + Math.cos(depart.getLat()) * Math.cos(arrive.getLat()) * Math.cos(depart.getLon() - arrive.getLon())));
+
+        double distance1 = 1900 / 50;
+        double hours = Math.floor(distance1);
+        double minutes = Math.ceil((distance1 - hours) * 60);
+
+        LocalDateTime ldt2 = ldt.plusHours((long) hours).plusMinutes((long) minutes);
+
+//----------Use this code once you solve depart/arrive-----------------------------------------------------------//
+//        ZoneId fromId = ZoneId.of(depart.getTimeZoneString());
+//        ZoneId toId = ZoneId.of(arrive.getTimeZoneString());
+
+        ZoneId fromId = ZoneId.of("America/" + departLocation.getValue());
+        ZoneId toId = ZoneId.of("America/" + arriveLocation.getValue());
+
+
+        ZonedDateTime currentTime = ldt2.atZone(fromId);
+
+        ZonedDateTime newTime = currentTime.withZoneSameInstant(toId);
+
+        //condition to add day
+        DateTimeFormatter dateFormat2 = DateTimeFormatter.ofPattern(DATE_FORMAT);
+        String arriveTime = dateFormat2.format(newTime);
+        System.out.println(arriveTime);
+        return arriveTime;
+    }
+
+    //-----change back to float------//
+    private void priceCheck(){
+        float price = (float) 150.00;
+//
+//        if (passenger.getGender().equals("F")){
+//            price = price * .75f;
+//        }
+//        else if (passenger.getAge() <= 12){
+//            price = price * .50f;
+//        }
+//        else if (passenger.getAge() >= 60){
+//            price = price * .40f;
+//        }
+//        return price;
     }
 
 }
