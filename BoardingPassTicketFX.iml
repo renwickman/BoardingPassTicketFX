@@ -11,22 +11,21 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="file://$USER_HOME$/Documents/Hibernate/JARS/hibernate JAR" />
+          <root url="file://$MODULE_DIR$/../JARS/hibernate JAR" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
-        <jarDirectory url="file://$USER_HOME$/Documents/Hibernate/JARS/hibernate JAR" recursive="false" />
+        <jarDirectory url="file://$MODULE_DIR$/../JARS/hibernate JAR" recursive="false" />
       </library>
     </orderEntry>
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$USER_HOME$/Documents/Hibernate/JARS/MySQL connector  Jar/mysql-connector-java-8.0.19.jar!/" />
+          <root url="jar://$MODULE_DIR$/../JARS/MySQL connector  Jar/mysql-connector-java-8.0.19.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="library" name="java 15.0.1" level="project" />
   </component>
 </module>
