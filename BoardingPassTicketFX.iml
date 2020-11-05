@@ -11,50 +11,21 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-<<<<<<< Updated upstream
-          <root url="file://$USER_HOME$/Documents/Hibernate/JARS/hibernate JAR" />
+          <root url="file://$MODULE_DIR$/../JARS/hibernate JAR" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
-        <jarDirectory url="file://$USER_HOME$/Documents/Hibernate/JARS/hibernate JAR" recursive="false" />
-=======
-          <root url="file://$MODULE_DIR$/../javafx-sdk-15/Hibernate/Hibernate/JARS/hibernate JAR" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-        <jarDirectory url="file://$MODULE_DIR$/../javafx-sdk-15/Hibernate/Hibernate/JARS/hibernate JAR" recursive="false" />
->>>>>>> Stashed changes
+        <jarDirectory url="file://$MODULE_DIR$/../JARS/hibernate JAR" recursive="false" />
       </library>
     </orderEntry>
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-<<<<<<< Updated upstream
-          <root url="jar://$USER_HOME$/Documents/Hibernate/JARS/MySQL connector  Jar/mysql-connector-java-8.0.19.jar!/" />
-=======
-          <root url="jar://$MODULE_DIR$/../javafx-sdk-15/Hibernate/Hibernate/JARS/MySQL connector  Jar/mysql-connector-java-8.0.19.jar!/" />
->>>>>>> Stashed changes
+          <root url="jar://$MODULE_DIR$/../JARS/MySQL connector  Jar/mysql-connector-java-8.0.19.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
       </library>
     </orderEntry>
-<<<<<<< Updated upstream
-    <orderEntry type="library" name="java 15.0.1" level="project" />
-=======
-    <orderEntry type="module-library">
-      <library>
-        <CLASSES>
-          <root url="file://$MODULE_DIR$/../javafx-sdk-15/lib" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES>
-          <root url="file://$MODULE_DIR$/../javafx-sdk-15/lib" />
-        </SOURCES>
-        <jarDirectory url="file://$MODULE_DIR$/../javafx-sdk-15/lib" recursive="false" />
-        <jarDirectory url="file://$MODULE_DIR$/../javafx-sdk-15/lib" recursive="false" type="SOURCES" />
-      </library>
-    </orderEntry>
->>>>>>> Stashed changes
   </component>
 </module>
