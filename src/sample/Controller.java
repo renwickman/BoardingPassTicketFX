@@ -10,8 +10,6 @@ import javafx.scene.control.ChoiceBox;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
-
-
 import java.awt.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -31,6 +29,7 @@ import java.util.Random;
 
 
 public class Controller {
+    public double distance;
     final String nameRegex = ".*\\S+.*";
     final String emailRegex = "^[A-Za-z0-9+_.-]+@(.+)$";
     final String ageRegex = "[0-9]{1,3}+";
@@ -186,7 +185,7 @@ public class Controller {
         Coordinates depart = cities.getCityList().get(departLocation.getValue());
         Coordinates arrive = cities.getCityList().get(arriveLocation.getValue());
 
-        double distance = Math.round(earthRadius * Math.acos(Math.sin(depart.getLat()) * Math.sin(arrive.getLat())
+        distance = Math.round(earthRadius * Math.acos(Math.sin(depart.getLat()) * Math.sin(arrive.getLat())
                 + Math.cos(depart.getLat()) * Math.cos(arrive.getLat()) * Math.cos(depart.getLon() - arrive.getLon())));
 
         double distance1 = distance / 50;
@@ -213,6 +212,10 @@ public class Controller {
 
     private float priceCheck() {
         float price = (float) 150.00;
+
+        if (distance > 1500.0f) {
+            price += 500.0f;
+        }
 
         if (((RadioButton) groupGender.getSelectedToggle()).getText().substring(0, 1).equals("F")) {
             price = price * .75f;
