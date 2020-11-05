@@ -17,6 +17,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -64,7 +65,7 @@ public class Controller {
     @FXML
     private Button enter;
 
-//    ArrayList<TextField> textFields = new ArrayList<>();
+    //    ArrayList<TextField> textFields = new ArrayList<>();
     final String DATE_FORMAT = "MM/dd/yyyy";
     Path filePath;
     //Cities cities;
@@ -82,7 +83,6 @@ public class Controller {
         departLocation.getItems().addAll("New_York", "Los_Angeles", "Phoenix", "Indianapolis", "Detroit");
         arriveLocation.getItems().addAll("New_York", "Los_Angeles", "Phoenix", "Indianapolis", "Detroit");
         time.getItems().addAll("06:00 AM", "08:00 AM", "10:00 AM", "12:00 PM", "02:00 PM", "04:00 PM", "06:00 PM", "08:00 PM", "10:00 PM");
-        filePath = Paths.get(System.getProperty("user.dir") + "/src/itinerary/" + name.getText() + ".txt");
         setStyle(name, nameRegex);
         setStyle(email, emailRegex);
         setStyle(age, ageRegex);
@@ -117,7 +117,7 @@ public class Controller {
                 application.setDepartDate(departDate.getValue().format(DateTimeFormatter.ofPattern(DATE_FORMAT)));
                 application.setDepartTime(String.valueOf(time.getValue()));
                 application.setDestination(String.valueOf(arriveLocation.getValue()));
-                application.setEta(estArrive());
+                application.setEta(estTimeArrive());
                 application.setTotal_price(priceCheck());
                 application.setBoarding_pass(createBoardPass());
                 createFile();
@@ -171,24 +171,25 @@ public class Controller {
         return text.matches(regex) ? 0 : 1;
     }
 
-    String estArrive(){
+    public String estTimeArrive() {
         final String DATE_FORMAT = "MM/dd/yyyy hh:mm a";
+        final String TEMP = "MM/dd/yyyy";
 
-        String leaveDateTime = departDate.getValue().format(DateTimeFormatter.ofPattern(DATE_FORMAT)) + " " + String.valueOf(time);
+        DateTimeFormatter dt = DateTimeFormatter.ofPattern(TEMP);
+        String departString = dt.format(departDate.getValue());
+        String leaveDateTime = departString + " " + time.getValue();
+
         LocalDateTime ldt = LocalDateTime.parse(leaveDateTime, DateTimeFormatter.ofPattern(DATE_FORMAT));
 
         double earthRadius = 6371.01 * 0.621;
-        double distance;
-
         Cities cities = new Cities();
-
         Coordinates depart = cities.getCityList().get(departLocation.getValue());
         Coordinates arrive = cities.getCityList().get(arriveLocation.getValue());
 
-        distance = Math.round(earthRadius * Math.acos(Math.sin(depart.getLat()) * Math.sin(arrive.getLat())
+        double distance = Math.round(earthRadius * Math.acos(Math.sin(depart.getLat()) * Math.sin(arrive.getLat())
                 + Math.cos(depart.getLat()) * Math.cos(arrive.getLat()) * Math.cos(depart.getLon() - arrive.getLon())));
 
-        double distance1 = distance/ 50;
+        double distance1 = distance / 50;
         double hours = Math.floor(distance1);
         double minutes = Math.ceil((distance1 - hours) * 60);
 
@@ -197,7 +198,6 @@ public class Controller {
 
         ZoneId fromId = ZoneId.of("America/" + departLocation.getValue());
         ZoneId toId = ZoneId.of("America/" + arriveLocation.getValue());
-
 
         ZonedDateTime currentTime = ldt2.atZone(fromId);
 
@@ -211,16 +211,14 @@ public class Controller {
     }
 
 
-    private float priceCheck(){
+    private float priceCheck() {
         float price = (float) 150.00;
 
-        if (((RadioButton) groupGender.getSelectedToggle()).getText().substring(0, 1).equals("F")){
+        if (((RadioButton) groupGender.getSelectedToggle()).getText().substring(0, 1).equals("F")) {
             price = price * .75f;
-        }
-        else if (Integer.parseInt(age.getText()) <= 12){
+        } else if (Integer.parseInt(age.getText()) <= 12) {
             price = price * .50f;
-        }
-        else if (Integer.parseInt(age.getText()) >= 60){
+        } else if (Integer.parseInt(age.getText()) >= 60) {
             price = price * .40f;
         }
         return price;
@@ -231,11 +229,11 @@ public class Controller {
         return object == null ? 1 : 0;
     }
 
-    String createBoardPass(){
+    String createBoardPass() {
         Random rand = new Random();
-        String pass ="ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+        String pass = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
         StringBuilder res = new StringBuilder();
-        for (int i = 0; i <= 12; i++){
+        for (int i = 0; i <= 12; i++) {
             int randIndex = rand.nextInt(pass.length());
             res.append(pass.charAt(randIndex));
         }
@@ -244,17 +242,19 @@ public class Controller {
 
 
     public void createFile() {
+        filePath = Paths.get(System.getProperty("user.dir") + "/src/itinerary/" + name.getText() + ".txt");
         try {
             Files.createFile(filePath);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-//
+
+    //
     public void writeToAFile(Application application) {
         SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
         Date date = new Date();
-        try{
+        try {
             Files.writeString(filePath, formatter.format(date) + application.toString());
         } catch (Exception e) {
             e.printStackTrace();
